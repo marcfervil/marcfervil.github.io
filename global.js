@@ -22,6 +22,10 @@
 
 	}
 	
+	sounds = {
+
+	}
+
 	fps = 60;
 	lastTime = (new Date()).getTime();
 	currentTime = 0;
@@ -117,8 +121,8 @@
 	}
 
 	function playSound(file){
-		var audio = new Audio("/"+file+'.mp3');
-		audio.play();
+		if(!sounds[file].hasOwnProperty(file))sounds[file] = new Audio("/"+file+'.mp3');
+		sounds[file].play();
 	}
 //ttaMncmar14$
 
