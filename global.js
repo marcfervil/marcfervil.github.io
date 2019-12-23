@@ -117,7 +117,7 @@
 	}
 
 	function playSound(file){
-		var audio = new Audio("./"+file+'.mp3');
+		var audio = new Audio("/"+file+'.mp3');
 		audio.play();
 	}
 //ttaMncmar14$
@@ -217,6 +217,7 @@
 		//console.log("up");
 		if(mode.action == "selection"){
 			select(getSelectedNode());
+			playSound("click");
 		}else {
 			
 			node = getSelectedNode();
@@ -225,7 +226,7 @@
 				//console.log(node);
 				mode.callback(node);
 			//	console.log(node)
-
+				playSound("click");
 				
 			}else{
 				alert("You can't do that!");
