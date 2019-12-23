@@ -1,0 +1,228 @@
+
+
+<html>
+
+	<head>
+		
+		<style>
+			ul {
+			  list-style-type: none;
+			  margin: 0;
+			  padding: 0;
+			}
+
+			li{
+			  cursor: hand;
+			}
+			li:hover{
+			  background-color : #00000040;
+			}
+
+
+			#aWrapper {
+	
+			    margin: 0 auto;
+			}
+
+			#gameCanvas {
+			  
+			    display: block;
+
+			  
+			    width: 100%;
+			    height: 100%;
+			}
+
+
+		</style>
+
+
+	</head>
+	<body >
+		<div style="font-family: Helvetica; ">
+		
+			<div style="float:left;width:25%;height:100%;">
+				<br>
+				
+				<h1 style="margin:0px;margin:0px; margin-left:10px;margin-bottom: 10px" id="TurnTitle">Top turn</h1>
+				<ul id= "TurnInfo" style="margin-left:30px;"></ul><br>
+				<button style="margin-left:25px" onClick="endTurn()">End Turn</button>
+				<hr>
+				<div id="display">
+					<br>
+			
+					<h1 style="margin:0px;margin:0px; margin-left:10px; margin-bottom: 10px" id="title"></h1>
+					<h2 style="margin:0px;margin:0px; margin-left:20px" >Evolutions</h2>
+					<ul id= "evolutions" style="margin-left:30px;"></ul><br>
+					<h2 style="margin:0px;margin:0px; margin-left:20px" >Abilities</h2>
+					<ul id= "abilities" style="margin-left:30px;"></ul><br>
+					<h2 style="margin:0px;margin:0px; margin-left:20px" >Effects</h2>
+					<ul id= "effects" style="margin-left:30px;"></ul>
+				</div>
+				
+			</div>
+			
+			
+
+		
+
+			<div  style="overflow: hidden;">
+				<center style="padding: 0px; margin: 0px; width:70%">
+					<h1 id="actionText" style="padding:0px">Select Monster</h1>
+		 			<div id="aWrapper"> <canvas id="gameCanvas" width="700" height="800"></canvas> </div>
+		 		</center>
+		 	</div>
+
+		</div>
+	</body>
+
+</html>
+
+<script type="text/javascript" src="./jquery.js"></script>
+<script type="text/javascript" src="./global.js"></script>
+<script type="text/javascript" src="./effects.js"></script>
+<script type="text/javascript" src="./abilities.js"></script>
+<script type="text/javascript" src="./monsters.js"></script>
+
+
+
+<script type="text/javascript">
+	
+	topMonsters = {monster:new Egg(),  x: 3, y: 0, children:[]};
+	bottomMonsters = {monster:new Egg(),  x: 3, y: 7, children:[]};
+
+	selectedMonsterId = topMonsters.monster.id;
+
+	frameTicks = 0;
+
+	var links = [];
+
+
+	function paint(){
+		//console.log(things); 
+
+		//console.log(links)
+		fixDpi();
+		ctx.clearRect(0, 0, c.width, c.height);
+		ctx.lineWidth = 3;
+
+		for(i in links){
+			//console.log("fefw");
+			if(links[i].team == "top"){
+				
+				n1 = links[i].n1;
+				n2 = links[i].n2;
+				ctx.strokeStyle = n2.monster.color;
+			}else{
+				
+				n1 = links[i].n2;
+				n2 = links[i].n1;
+				ctx.strokeStyle = n1.monster.color;
+			}
+			//console.log("test");
+
+			ctx.beginPath();
+			
+			ctx.moveTo((20+(90*n1.x)+40), (20+(90*n1.y)+80));
+			ctx.lineTo((20+(90*n2.x)+40), (20+(90*n2.y)));
+	
+			
+			ctx.stroke();
+			ctx.closePath();
+		}
+
+		for(var y in nodes){
+			//console.log(thing)
+			for(var x in nodes[y]){
+				//console.log(mode);
+				if(nodes[y][x].name!="nothing")nodes[y][x].paint(x,y);
+
+				if(nodes[y][x].id==selectedMonsterId)drawSelectionBox(nodes[y][x],x,y);
+
+				if(x==highlight.x && y == highlight.y){
+					if(nodes[y][x].name!="nothing"){
+						document.body.style.cursor = "hand";
+					}else{
+						document.body.style.cursor = "default";
+					}
+
+				//	ctx.beginPath();
+
+					ctx.fillStyle = "#00000040";
+
+					if(mode.action!="selection" ){
+						//console.log(findYourMonsterNode(nodes[y][x].id));
+						if(mode.canSelect(findYourMonsterNode(nodes[y][x].id))){
+							
+							document.body.style.cursor = "hand";
+							ctx.fillStyle = "#0080008C";
+
+						}else{
+							document.body.style.cursor = "default";
+							ctx.fillStyle = "#FF00008C";
+						
+						}
+					}
+					ctx.beginPath();
+					ctx.rect((20+(90*x)), (20+(90*y)), 80, 80);
+					ctx.fill();
+				}
+				
+			}
+		}
+
+		
+	}
+
+	function drawSelectionBox(monster, x, y){
+		ctx.strokeStyle = "blue";
+
+       	
+		ctx.beginPath();
+  		ctx.rect(((20+(90*x))-frameTicks), ((20+(90*y)))-frameTicks, 80+(frameTicks*2), 80+(frameTicks*2));
+  		ctx.stroke();
+
+
+  		frameTicks+=0.5;
+
+  		if(frameTicks == 15)frameTicks = 0;
+	}
+
+	function gameLoop() {
+	    window.requestAnimationFrame(gameLoop);
+
+
+	    currentTime = (new Date()).getTime();
+	    delta = (currentTime - lastTime) / 1000;
+	    //cx.clearRect(0, 0, cw, cw);
+	    
+	    paint();
+
+	    lastTime = currentTime;
+	}
+
+
+	function createEmptyNodes(){
+		nodes = [];
+		for(var i=0;i<8;i++){
+			row = [];
+			for(var j=0;j<50;j++){
+				row.push(new Nothing());
+			}
+			nodes.push(row);
+		}
+	}
+
+
+	function setup(){
+		//ctx.translate(0.5, 0.5);
+		createEmptyNodes();
+		
+		refresh();
+		setTurn(randInt(1,2)==1 ? "top": "bottom");
+		switchTurn = otherTeam();
+		gameLoop();
+	}	
+
+	setup();
+</script>
