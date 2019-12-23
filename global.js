@@ -121,7 +121,7 @@
 	}
 
 	function playSound(file){
-		if(!sounds[file].hasOwnProperty(file))sounds[file] = new Audio("/"+file+'.mp3');
+		if(!sounds[file].hasOwnProperty(file))sounds[file] = new Audio("/"+file+'.wav');
 		sounds[file].play();
 	}
 //ttaMncmar14$
