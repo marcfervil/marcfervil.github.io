@@ -149,7 +149,7 @@ class DoubleAttack extends Ability{
 		if(this.monster.attack > 0){
 			selectNode("attack","Select a target", (node) => (node.team == otherTeam() && !node.monster.hasEffect("Fortified")), (selection) => { 
 
-				this. x = selection.monster.damage(this.monster.attack);
+				this. x = selection.monster.damage(Math.floor(this.monster.attack/2));
 
 				refresh();
 				beginSelection();

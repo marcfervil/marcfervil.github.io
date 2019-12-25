@@ -23,7 +23,10 @@
 	}
 	
 	sounds = {
-
+		"click" : new Audio('click.wav'),
+		"place" : new Audio('place.wav'),
+		"death" : new Audio('death.wav'),
+		"hurt" : new Audio('hurt.wav')
 	}
 
 	fps = 60;
@@ -120,8 +123,10 @@
 		$("#TurnTitle").text(`${turn.charAt(0). toUpperCase() + turn.slice(1)}'s Turn`);
 	}
 
+
+
 	function playSound(file){
-		if(!sounds.hasOwnProperty(file))sounds[file] = new Audio("/"+file+'.wav');
+		//if(!sounds.hasOwnProperty(file))sounds[file] = ;
 		sounds[file].play();
 	}
 //ttaMncmar14$

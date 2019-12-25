@@ -146,7 +146,7 @@
     class Dog extends Monster {
       constructor() {
          super("Dog",2,1);
-         this.evolutions = [Wolf,Fox,Rat,Coyote];
+         this.evolutions = [Wolf,Fox,Coyote];
       }
        static get cost(){
           return 1;
