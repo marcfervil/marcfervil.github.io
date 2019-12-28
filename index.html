@@ -47,6 +47,7 @@
 				<h1 style="margin:0px;margin:0px; margin-left:10px;margin-bottom: 10px" id="TurnTitle">Top turn</h1>
 				<ul id= "TurnInfo" style="margin-left:30px;"></ul><br>
 				<button style="margin-left:25px" onClick="endTurn()">End Turn</button>
+
 				<hr>
 				<div id="display">
 					<br>
@@ -69,7 +70,7 @@
 			<div  style="overflow: hidden;">
 				<center style="padding: 0px; margin: 0px; width:70%">
 					<h1 id="actionText" style="padding:0px">Select Monster</h1>
-		 			<div id="aWrapper"> <canvas id="gameCanvas" width="700" height="800"></canvas> </div>
+		 			<div id="aWrapper"> <canvas id="gameCanvas" ></canvas> </div>
 		 		</center>
 		 	</div>
 
@@ -89,7 +90,7 @@
 <script type="text/javascript">
 	
 	topMonsters = {monster:new Egg(),  x: 3, y: 0, children:[]};
-	bottomMonsters = {monster:new Egg(),  x: 3, y: 7, children:[]};
+	bottomMonsters = {monster:new Egg(),  x: 3, y: 6, children:[]};
 
 	selectedMonsterId = topMonsters.monster.id;
 
@@ -97,12 +98,17 @@
 
 	var links = [];
 
+	function toggleDpi(){
+		dpiFixed = !dpiFixed;
+	}
+	
+	fixDpi();
 
 	function paint(){
 		//console.log(things); 
 
 		//console.log(links)
-		fixDpi();
+
 		ctx.clearRect(0, 0, c.width, c.height);
 		ctx.lineWidth = 3;
 
